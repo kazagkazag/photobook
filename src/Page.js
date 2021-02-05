@@ -8,53 +8,46 @@ export const Page = ({ service, save }) => {
   return (
     <main>
       {current.matches("selectingPhoto") ? (
-        <p>
-          <button onClick={() => send("UPLOAD_PHOTO")}>Upload image</button>
-        </p>
+        <button onClick={() => send("UPLOAD_PHOTO")}>Upload image</button>
       ) : null}
 
       {current.matches("failure") ? <p>Error!</p> : null}
 
-      {current.matches("details") ? (
+      {current.matches("details") || current.matches("done") ? (
         <div>
           <p>Image: {fileHandler}</p>
-          <p>
-            Title:
-            {current.matches("details.editingTitle.editing") ? (
-              <button
-                onClick={() =>
-                  send("SET_TITLE", {
-                    title: "test title",
-                  })
-                }
-              >
-                Set title
-              </button>
-            ) : null}
-            {current.matches("details.editingTitle.done") ? title : null}
-          </p>
-          <p>
-            Description:
-            {current.matches("details.editingDesc.editing") ? (
-              <button
-                onClick={() =>
-                  send("SET_DESC", {
-                    desc: "test desc",
-                  })
-                }
-              >
-                Set description
-              </button>
-            ) : null}
-            {current.matches("details.editingDesc.done") ? desc : null}
-          </p>
+          <p>Title: {title}</p>
+          <p>Description: {desc}</p>
         </div>
       ) : null}
 
+      {current.matches("details.editingTitle.editing") ? (
+        <button
+          onClick={() =>
+            send("SET_TITLE", {
+              title: "test title",
+            })
+          }
+        >
+          Set title
+        </button>
+      ) : null}
+      {current.matches("details.editingDesc.editing") ? (
+        <button
+          onClick={() =>
+            send("SET_DESC", {
+              desc: "test desc",
+            })
+          }
+        >
+          Set description
+        </button>
+      ) : null}
+
       {current.matches("done") ? (
-        <p>
-          <button onClick={save}>Save</button>
-        </p>
+        <button className="primary" onClick={save}>
+          Save
+        </button>
       ) : null}
     </main>
   );

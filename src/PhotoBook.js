@@ -9,7 +9,7 @@ export const PhotoBook = () => {
   const { pages, selectedPage } = current.context;
 
   return (
-    <main>
+    <main className="container">
       {current.matches("initialSettings") ? (
         <button
           onClick={() =>
@@ -38,9 +38,7 @@ export const PhotoBook = () => {
         : null}
 
       {current.matches("selectingPage") ? (
-        <p>
-          <button onClick={() => send("FINISH")}>Done!</button>
-        </p>
+        <button onClick={() => send("FINISH")} className="primary">Done!</button>
       ) : null}
 
       {current.matches("page") ? (

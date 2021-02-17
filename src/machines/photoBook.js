@@ -1,70 +1,74 @@
 import { Machine, assign, spawn } from "xstate";
 import { createPageMachine } from "./page";
 
-export const photoBook = Machine({
-  id: "photoBook",
-  initial: "initialSettings",
-  context: {
-    pages: [],
-    selectedPage: null,
-  },
-  states: {
-    initialSettings: {
-      on: {
-        SELECT_NO_OF_PAGES: {
-          target: "selectingPage",
-          actions: assign((context, event) => {
-            const noOfPages = event.pages;
-            const pages = [];
+export const photoBook = createPhotoBook();
 
-            for (let i = 0; i < noOfPages; i++) {
-              pages.push(
-                spawn(createPageMachine(i), {
-                  sync: true,
-                })
-              );
-            }
-
-            return {
-              ...context,
-              pages,
-            };
-          }),
-        },
-      },
+export function createPhotoBook() {
+  return Machine({
+    id: "photoBook",
+    initial: "initialSettings",
+    context: {
+      pages: [],
+      selectedPage: null,
     },
-    selectingPage: {
-      on: {
-        SELECT_PAGE: {
-          target: "page",
-          actions: assign((context, event) => {
-            return {
-              ...context,
-              selectedPage: event.page,
-            };
-          }),
-        },
-        FINISH: {
-          target: "summary",
-          cond: (ctx, e) => {
-            const allDone = ctx.pages.every((p) => {
-              return p.state.value === "done";
-            });
+    states: {
+      initialSettings: {
+        on: {
+          SELECT_NO_OF_PAGES: {
+            target: "selectingPage",
+            actions: assign((context, event) => {
+              const noOfPages = event.pages;
+              const pages = [];
 
-            if (!allDone) {
-              alert("Ooops! Please fill out all the pages!");
-            }
+              for (let i = 0; i < noOfPages; i++) {
+                pages.push(
+                  spawn(createPageMachine(i), {
+                    sync: true,
+                  })
+                );
+              }
 
-            return allDone;
+              return {
+                ...context,
+                pages,
+              };
+            }),
           },
         },
       },
-    },
-    page: {
-      on: {
-        SAVE: "selectingPage",
+      selectingPage: {
+        on: {
+          SELECT_PAGE: {
+            target: "page",
+            actions: assign((context, event) => {
+              return {
+                ...context,
+                selectedPage: event.page,
+              };
+            }),
+          },
+          FINISH: {
+            target: "summary",
+            cond: (ctx, e) => {
+              const allDone = ctx.pages.every((p) => {
+                return p.state.value === "done";
+              });
+
+              if (!allDone) {
+                alert("Ooops! Please fill out all the pages!");
+              }
+
+              return allDone;
+            },
+          },
+        },
       },
+      page: {
+        on: {
+          SAVE: "selectingPage",
+        },
+      },
+      summary: {},
     },
-    summary: {},
-  },
-});
+  });
+}

@@ -21,14 +21,15 @@ export function createPageMachine(pageNumber) {
           1000: "failure",
         },
         invoke: {
-          src: () =>
-            new Promise((resolve) => {
+          src: () => {
+            return new Promise((resolve) => {
               setTimeout(() => {
                 resolve({
                   fileHandler: "some file",
                 });
               }, 500);
-            }),
+            });
+          },
           onDone: {
             target: "details",
             actions: assign({

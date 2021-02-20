@@ -32,12 +32,46 @@ describe("Page machine", () => {
     service.send({ type: "UPLOAD_PHOTO" });
   });
 
-  it(
-    "should go to the failure state in the case of an error while uploading the file"
-  );
-  it(
-    "should go to the failure state in the case of a timeout while uploading the file"
-  );
+  it("should go to the failure state in the case of an error while uploading the file", (done) => {
+    const failingService = () => Promise.reject("Error");
+
+    const service = interpret(
+      machine.withConfig({
+        services: {
+          uploadPhoto: failingService,
+        },
+      })
+    ).onTransition((state) => {
+      if (state.matches("failure")) {
+        done();
+      }
+    });
+
+    service.start();
+
+    service.send({ type: "UPLOAD_PHOTO" });
+  });
+  it("should go to the failure state in the case of a timeout while uploading the file", (done) => {
+    jest.useFakeTimers();
+    const neverEndingService = () => new Promise(() => {});
+
+    const service = interpret(
+      machine.withConfig({
+        services: {
+          uploadPhoto: neverEndingService,
+        },
+      })
+    ).onTransition((state) => {
+      if (state.matches("failure")) {
+        done();
+      }
+    });
+
+    service.start();
+
+    service.send({ type: "UPLOAD_PHOTO" });
+    jest.runAllTimers();
+  });
 
   it("should go to the selecting photo state after retrying from the failure state", () => {
     const result = machine.transition("failure", {

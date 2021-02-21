@@ -1,5 +1,6 @@
 import React from "react";
 import { useService } from "@xstate/react";
+import { events } from "./machines/page";
 
 export const Page = ({ service, save }) => {
   const [current, send] = useService(service);
@@ -8,7 +9,7 @@ export const Page = ({ service, save }) => {
   return (
     <main>
       {current.matches("selectingPhoto") ? (
-        <button onClick={() => send("UPLOAD_PHOTO")}>Upload image</button>
+        <button onClick={() => send(events.UPLOAD_PHOTO)}>Upload image</button>
       ) : null}
 
       {current.matches("failure") ? <p>Error!</p> : null}
@@ -24,7 +25,7 @@ export const Page = ({ service, save }) => {
       {current.matches("details.editingTitle.editing") ? (
         <button
           onClick={() =>
-            send("SET_TITLE", {
+            send(events.SET_TITLE, {
               title: "test title",
             })
           }
@@ -35,7 +36,7 @@ export const Page = ({ service, save }) => {
       {current.matches("details.editingDesc.editing") ? (
         <button
           onClick={() =>
-            send("SET_DESC", {
+            send(events.SET_DESC, {
               desc: "test desc",
             })
           }

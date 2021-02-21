@@ -1,5 +1,5 @@
 import { interpret } from "xstate";
-import { createPageMachine } from "./page";
+import { createPageMachine, events } from "./page";
 
 describe("Page machine", () => {
   let machine = null;
@@ -14,7 +14,7 @@ describe("Page machine", () => {
 
   it("should go to the uploading photo state after selecting a file", () => {
     const result = machine.transition("selectingPhoto", {
-      type: "UPLOAD_PHOTO",
+      type: events.UPLOAD_PHOTO,
     });
 
     expect(result.matches("uploadingPhoto")).toBeTruthy();
@@ -29,7 +29,7 @@ describe("Page machine", () => {
 
     service.start();
 
-    service.send({ type: "UPLOAD_PHOTO" });
+    service.send({ type: events.UPLOAD_PHOTO });
   });
 
   it("should go to the failure state in the case of an error while uploading the file", (done) => {
@@ -49,7 +49,7 @@ describe("Page machine", () => {
 
     service.start();
 
-    service.send({ type: "UPLOAD_PHOTO" });
+    service.send({ type: events.UPLOAD_PHOTO });
   });
   it("should go to the failure state in the case of a timeout while uploading the file", (done) => {
     jest.useFakeTimers();
@@ -69,13 +69,13 @@ describe("Page machine", () => {
 
     service.start();
 
-    service.send({ type: "UPLOAD_PHOTO" });
+    service.send({ type: events.UPLOAD_PHOTO });
     jest.runAllTimers();
   });
 
   it("should go to the selecting photo state after retrying from the failure state", () => {
     const result = machine.transition("failure", {
-      type: "RETRY",
+      type: events.RETRY,
     });
 
     expect(result.matches("selectingPhoto")).toBeTruthy();
@@ -86,11 +86,11 @@ describe("Page machine", () => {
       fileHandler: "test",
     });
     const withTitle = withFile.transition("details.editingTitle.editing", {
-      type: "SET_TITLE",
+      type: events.SET_TITLE,
       title: "test title",
     });
     const withDesc = withFile.transition(withTitle, {
-      type: "SET_DESC",
+      type: events.SET_DESC,
       desc: "test desc",
     });
 
@@ -102,7 +102,3 @@ describe("Page machine", () => {
     });
   });
 });
-
-function flushPromises() {
-  return new Promise(setImmediate);
-}

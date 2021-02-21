@@ -1,6 +1,13 @@
 import { Machine, assign, spawn } from "xstate";
 import { createPageMachine } from "./page";
 
+export const events = {
+  SELECT_NO_OF_PAGES: "SELECT_NO_OF_PAGES",
+  SELECT_PAGE: "SELECT_PAGE",
+  FINISH: "FINISH",
+  SAVE: "SAVE",
+};
+
 export const photoBook = createPhotoBook();
 
 export function createPhotoBook() {
@@ -14,7 +21,7 @@ export function createPhotoBook() {
     states: {
       initialSettings: {
         on: {
-          SELECT_NO_OF_PAGES: {
+          [events.SELECT_NO_OF_PAGES]: {
             target: "selectingPage",
             actions: assign((context, event) => {
               const noOfPages = event.pages;
@@ -38,7 +45,7 @@ export function createPhotoBook() {
       },
       selectingPage: {
         on: {
-          SELECT_PAGE: {
+          [events.SELECT_PAGE]: {
             target: "page",
             actions: assign((context, event) => {
               return {
@@ -47,7 +54,7 @@ export function createPhotoBook() {
               };
             }),
           },
-          FINISH: {
+          [events.FINISH]: {
             target: "summary",
             cond: (ctx, e) => {
               const allDone = ctx.pages.every((p) => {
@@ -65,7 +72,7 @@ export function createPhotoBook() {
       },
       page: {
         on: {
-          SAVE: "selectingPage",
+          [events.SAVE]: "selectingPage",
         },
       },
       summary: {},

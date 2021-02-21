@@ -1,4 +1,4 @@
-import { createPhotoBook } from "./photoBook";
+import { createPhotoBook, events } from "./photoBook";
 
 describe("Photobook machine", () => {
   let machine = null;
@@ -14,7 +14,7 @@ describe("Photobook machine", () => {
 
   it("should go to the selecting page state after selecting the number of pages", () => {
     const result = machine.transition("initialSettings", {
-      type: "SELECT_NO_OF_PAGES",
+      type: events.SELECT_NO_OF_PAGES,
       pages: 2,
     });
     const { context } = result;
@@ -26,7 +26,7 @@ describe("Photobook machine", () => {
 
   it("should go to the page state after selecting the page", () => {
     const result = machine.transition("selectingPage", {
-      type: "SELECT_PAGE",
+      type: events.SELECT_PAGE,
       page: 1,
     });
 
@@ -40,7 +40,7 @@ describe("Photobook machine", () => {
         pages: [completedPage(), completedPage()],
       })
       .transition("selectingPage", {
-        type: "FINISH",
+        type: events.FINISH,
       });
 
     expect(result.matches("summary")).toBeTruthy();
@@ -53,7 +53,7 @@ describe("Photobook machine", () => {
         pages: [completedPage(), incompletedPage()],
       })
       .transition("selectingPage", {
-        type: "FINISH",
+        type: events.FINISH,
       });
 
     expect(result.matches("selectingPage")).toBeTruthy();
@@ -62,7 +62,7 @@ describe("Photobook machine", () => {
 
   it("should go to the selecting page state if page editing is finished", () => {
     const result = machine.transition("page", {
-      type: "SAVE",
+      type: events.SAVE,
     });
 
     expect(result.matches("selectingPage")).toBeTruthy();

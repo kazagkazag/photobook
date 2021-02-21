@@ -1,6 +1,6 @@
 import React from "react";
 import { useMachine } from "@xstate/react";
-import { photoBook } from "./machines/photoBook";
+import { photoBook, events } from "./machines/photoBook";
 import { Page } from "./Page";
 
 export const PhotoBook = () => {
@@ -13,7 +13,7 @@ export const PhotoBook = () => {
       {current.matches("initialSettings") ? (
         <button
           onClick={() =>
-            send("SELECT_NO_OF_PAGES", {
+            send(events.SELECT_NO_OF_PAGES, {
               pages: 3,
             })
           }
@@ -27,7 +27,7 @@ export const PhotoBook = () => {
             <button
               key={i}
               onClick={() => {
-                send("SELECT_PAGE", {
+                send(events.SELECT_PAGE, {
                   page: i,
                 });
               }}
@@ -38,7 +38,9 @@ export const PhotoBook = () => {
         : null}
 
       {current.matches("selectingPage") ? (
-        <button onClick={() => send("FINISH")} className="primary">Done!</button>
+        <button onClick={() => send(events.FINISH)} className="primary">
+          Done!
+        </button>
       ) : null}
 
       {current.matches("page") ? (
@@ -47,7 +49,7 @@ export const PhotoBook = () => {
           <Page
             service={pages[selectedPage]}
             save={() => {
-              send("SAVE");
+              send(events.SAVE);
             }}
           />
         </div>

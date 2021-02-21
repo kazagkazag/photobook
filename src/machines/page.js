@@ -1,6 +1,13 @@
 import { Machine, assign } from "xstate";
 
-export function createPageMachine(pageNumber) {
+export const events = {
+  UPLOAD_PHOTO: "UPLOAD_PHOTO",
+  SET_TITLE: "SET_TITLE",
+  SET_DESC: "SET_DESC",
+  RETRY: "RETRY",
+};
+
+export function createPageMachine() {
   return Machine(
     {
       id: "photoBookPage",
@@ -9,12 +16,11 @@ export function createPageMachine(pageNumber) {
         fileHandler: null,
         title: null,
         desc: null,
-        pageNumber,
       },
       states: {
         selectingPhoto: {
           on: {
-            UPLOAD_PHOTO: "uploadingPhoto",
+            [events.UPLOAD_PHOTO]: "uploadingPhoto",
           },
         },
         uploadingPhoto: {
@@ -50,7 +56,7 @@ export function createPageMachine(pageNumber) {
               states: {
                 editing: {
                   on: {
-                    SET_TITLE: {
+                    [events.SET_TITLE]: {
                       target: "done",
                       actions: assign({
                         title: (ctx, event) => event.title,
@@ -66,7 +72,7 @@ export function createPageMachine(pageNumber) {
               states: {
                 editing: {
                   on: {
-                    SET_DESC: {
+                    [events.SET_DESC]: {
                       target: "done",
                       actions: assign((ctx, event) => {
                         return {
@@ -84,7 +90,7 @@ export function createPageMachine(pageNumber) {
         },
         failure: {
           on: {
-            RETRY: "selectingPhoto",
+            [events.RETRY]: "selectingPhoto",
           },
         },
         done: {},

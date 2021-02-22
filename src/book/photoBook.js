@@ -1,5 +1,5 @@
 import { Machine, assign, spawn } from "xstate";
-import { createPageMachine } from "./page";
+import { createPageMachine } from "./page/page";
 
 export const events = {
   SELECT_NO_OF_PAGES: "SELECT_NO_OF_PAGES",

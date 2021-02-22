@@ -1,6 +1,6 @@
 import React from "react";
 import { useService } from "@xstate/react";
-import { events } from "./machines/page";
+import { events } from "./page";
 
 export const Page = ({ service, save }) => {
   const [current, send] = useService(service);

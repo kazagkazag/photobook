@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import "./mini.css";
-import { PhotoBook } from "./PhotoBook";
+import { PhotoBook } from "./book/PhotoBookView";
 import reportWebVitals from "./reportWebVitals";
 
 ReactDOM.render(

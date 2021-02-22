@@ -1,7 +1,7 @@
 import React from "react";
 import { useMachine } from "@xstate/react";
-import { photoBook, events } from "./machines/photoBook";
-import { Page } from "./Page";
+import { photoBook, events } from "./photoBook";
+import { Page } from "./page/PageView";
 
 export const PhotoBook = () => {
   const [current, send] = useMachine(photoBook);

@@ -6,7 +6,11 @@ It's not a production-quality code and has been built solely for educational pur
 
 The project is a simplified version of a photo book application.
 
-You start with adding three pages to your photobook and then you can fill out all the pages and finally go to the summary. It's powered by two state machines: `src/book/photoBook.js` and `src/book/page/page.js`. See the files and their tests for more details.
+You start with adding three pages to your photobook and then you can fill out all the pages and finally go to the summary. It's powered by two state machines: `src/book/photoBook.js` and `src/book/page/  page.js`. See the files and their tests for more details.
+
+Use `npm start` to run the application.
+
+# Technical details
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

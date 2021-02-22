@@ -1,4 +1,12 @@
-# Getting Started with Create React App
+# Introduction
+
+This project has been created as a demo for a presentation about state machines. It uses Xstate library for state management and react for displaying the UI.
+
+It's not a production-quality code and has been built solely for educational purposes. There is no error handling.
+
+The project is a simplified version of a photo book application.
+
+You start with adding three pages to your photobook and then you can fill out all the pages and finally go to the summary. It's powered by two state machines: `photoBook.js` and `page.js`. See the files and their tests for more details.
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
